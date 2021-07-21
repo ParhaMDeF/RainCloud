@@ -6,3 +6,11 @@ const Color grey = Color(0XFFD3D5D4);
 const Color darkGrey = Color(0XFF59595A);
 const Color gold = Color(0XFFE2C029);
 const Color lightBrown = Color(0XFFD3C49C);
+const Color purple = Color(0xFF72dbcff);
+BoxShadow navigationBarIconsShadow = BoxShadow(
+  color: darkGrey.withOpacity(0.2),
+  spreadRadius: 12,
+  blurRadius: 10,
+  offset:
+  Offset(0, 0), // changes position of shadow
+);

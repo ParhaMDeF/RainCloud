@@ -1,5 +1,6 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_svg/flutter_svg.dart';
 
 import 'consts.dart';
 
@@ -14,7 +15,8 @@ class DateAndLocation extends StatelessWidget {
         SizedBox(height: 8),
         Row(
           children: [
-            Icon(Icons.location_on_rounded, color: Colors.white, size: 18),
+            SvgPicture.asset('icons/Location.svg',
+                color: Colors.white, width: 14, height: 18),
             SizedBox(width: 4),
             Text('Tehran, ',
                 style: TextStyle(
