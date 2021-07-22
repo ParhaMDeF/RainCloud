@@ -1,78 +1,71 @@
 import 'dart:ui';
-
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:weather/consts.dart';
 
-class SearchLocationScreen extends StatelessWidget {
+bool show = true;
+
+class SearchLocationScreen extends StatefulWidget {
+  @override
+  _SearchLocationScreenState createState() => _SearchLocationScreenState();
+}
+
+class _SearchLocationScreenState extends State<SearchLocationScreen> {
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      body: SafeArea(
-          child: Column(
-        children: [
-          Row(
-            children: [
-              IconButton(
-                  onPressed: () {
-                    Navigator.pop(context);
-                  },
-                  icon: SvgPicture.asset(
-                    'icons/Left Arrow 1.svg',
-                    color: Colors.white,
-                  )),
-              Spacer(
-                flex: 2,
-              ),
-              Text(
-                'Search for city',
-                style: TextStyle(
-                    fontFamily: 'Roboto', fontSize: 26, color: Colors.white),
-              ),
-              Spacer(flex: 3),
-            ],
-          ),
-          SizedBox(height: 20),
-          TextFiled(),
-          SizedBox(height: MediaQuery.of(context).size.height * 0.15),
-          Stack(
-            alignment: AlignmentDirectional.center,
-            overflow: Overflow.visible,
-            children: [
-              Image.asset(
-                'icons/world.png',
-                fit: BoxFit.fill,
-              ),
-              CityCards(),
-              MoreCitiesWidget(),
-              SizedBox(height: MediaQuery.of(context).size.height * 0.15),
-              Positioned(
-                bottom: MediaQuery.of(context).size.height * (-0.05),
-                left: MediaQuery.of(context).size.width * 0.2,
-                child: Container(
-                  width: 30,
-                  height: 45,
-                  decoration: BoxDecoration(
-                      borderRadius: BorderRadius.circular(25), color: gold),
-                ),
-              ),
-              Positioned(
-                bottom: MediaQuery.of(context).size.height * (0.025),
-                left: MediaQuery.of(context).size.width * 0.63,
-                child: Container(
-                  width: 30,
-                  height: 45,
-                  decoration: BoxDecoration(
-                      borderRadius: BorderRadius.circular(25), color: purple),
-                ),
-              ),
-              WeatherData()
-            ],
-          )
-        ],
-      )),
-    );
+    return SafeArea(
+        child: Column(
+      children: [
+        Text(
+          'Search for city',
+          style: TextStyle(
+              fontFamily: 'Roboto', fontSize: 26, color: Colors.white),
+        ),
+        SizedBox(height: 20),
+        TextFiled(),
+        SizedBox(height: MediaQuery.of(context).size.height * 0.15),
+        Stack(
+          alignment: AlignmentDirectional.center,
+          overflow: Overflow.visible,
+          children: [
+            Image.asset(
+              'icons/world.png',
+              fit: BoxFit.fill,
+            ),
+            CityCards(),
+            MoreCitiesWidget(),
+            SizedBox(height: MediaQuery.of(context).size.height * 0.15),
+            show
+                ? Positioned(
+                    bottom: MediaQuery.of(context).size.height * (-0.05),
+                    left: MediaQuery.of(context).size.width * 0.2,
+                    child: Container(
+                      width: 30,
+                      height: 45,
+                      decoration: BoxDecoration(
+                          borderRadius: BorderRadius.circular(25), color: gold),
+                    ),
+                  )
+                : Container(),
+            show
+                ? Positioned(
+                    bottom: MediaQuery.of(context).size.height * (0.025),
+                    left: MediaQuery.of(context).size.width * 0.63,
+                    child: Container(
+                      width: 30,
+                      height: 45,
+                      decoration: BoxDecoration(
+                          borderRadius: BorderRadius.circular(25),
+                          color: purple),
+                    ),
+                  )
+                : Container(),
+            WeatherData(),
+          ],
+        ),
+      ],
+    ));
   }
 }
 
@@ -112,10 +105,6 @@ class WeatherData extends StatelessWidget {
 }
 
 class Presure extends StatelessWidget {
-  const Presure({
-    Key? key,
-  }) : super(key: key);
-
   @override
   Widget build(BuildContext context) {
     return Column(
@@ -135,10 +124,6 @@ class Presure extends StatelessWidget {
 }
 
 class Wind extends StatelessWidget {
-  const Wind({
-    Key? key,
-  }) : super(key: key);
-
   @override
   Widget build(BuildContext context) {
     return Column(
@@ -158,10 +143,6 @@ class Wind extends StatelessWidget {
 }
 
 class Humidity extends StatelessWidget {
-  const Humidity({
-    Key? key,
-  }) : super(key: key);
-
   @override
   Widget build(BuildContext context) {
     return Column(
@@ -181,10 +162,6 @@ class Humidity extends StatelessWidget {
 }
 
 class Precipation extends StatelessWidget {
-  const Precipation({
-    Key? key,
-  }) : super(key: key);
-
   @override
   Widget build(BuildContext context) {
     return Column(

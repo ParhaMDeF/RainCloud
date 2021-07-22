@@ -1,7 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:google_fonts/google_fonts.dart';
 import 'package:weather/consts.dart';
-
 import 'HomeScreen.dart';
 
 void main() {
@@ -13,9 +11,7 @@ class MyApp extends StatelessWidget {
   Widget build(BuildContext context) {
     return MaterialApp(
       debugShowCheckedModeBanner: false,
-      theme: ThemeData(
-        fontFamily: 'Roboto',
-        scaffoldBackgroundColor: black),
+      theme: ThemeData(fontFamily: 'Roboto', scaffoldBackgroundColor: black),
       home: HomeScreen(),
     );
   }

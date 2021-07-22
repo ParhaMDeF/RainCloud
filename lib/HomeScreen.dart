@@ -1,3 +1,4 @@
+import 'package:animations/animations.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
@@ -18,6 +19,17 @@ class _HomeScreenState extends State<HomeScreen> {
   Widget build(BuildContext context) {
     return SafeArea(
       child: Scaffold(
+        backgroundColor: Colors.black,
+        body: PageTransitionSwitcher(
+          duration: Duration(milliseconds: 150),
+          transitionBuilder: (child, primaryAnimation, secondaryAnimation) =>
+              FadeThroughTransition(
+                  animation: primaryAnimation,
+                  secondaryAnimation: secondaryAnimation,
+                  fillColor: Colors.black45.withOpacity(0.2),
+                  child: child),
+          child: tabs[index],
+        ),
         bottomNavigationBar: BottomNavigationBar(
             type: BottomNavigationBarType.fixed,
             backgroundColor: black,
@@ -77,8 +89,6 @@ class _HomeScreenState extends State<HomeScreen> {
                   ),
                   title: Container()),
             ]),
-        backgroundColor: Colors.black,
-        body: tabs[index],
       ),
     );
   }
