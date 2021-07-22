@@ -62,9 +62,14 @@ class HourlyItems extends StatelessWidget {
           width: 20,
           height: 27,
           decoration: BoxDecoration(
-            borderRadius: BorderRadius.circular(10),
-            color: color,
-          ),
+              boxShadow: [
+                BoxShadow(
+                  color: color,
+                  spreadRadius: 0.5,
+                  blurRadius: 10,
+                  offset: Offset(0, 0),
+                )
+              ]),
         ),
         ClipRect(
           child: BackdropFilter(

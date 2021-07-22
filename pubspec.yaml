@@ -34,6 +34,7 @@ dependencies:
   provider: ^5.0.0
   http: ^0.13.3
   animations: ^2.0.0
+  glass_kit: ^2.0.1
 
 dev_dependencies:
   flutter_test:

@@ -20,8 +20,9 @@ class _HomeScreenState extends State<HomeScreen> {
     return SafeArea(
       child: Scaffold(
         backgroundColor: Colors.black,
-        body: PageTransitionSwitcher(
-          duration: Duration(milliseconds: 150),
+        body:
+        PageTransitionSwitcher(
+          duration: Duration(milliseconds: 200),
           transitionBuilder: (child, primaryAnimation, secondaryAnimation) =>
               FadeThroughTransition(
                   animation: primaryAnimation,
@@ -64,30 +65,30 @@ class _HomeScreenState extends State<HomeScreen> {
                         : 'icons/SearchOutline.svg'),
                   ),
                   title: Container()),
-              BottomNavigationBarItem(
-                  icon: Container(
-                    decoration: BoxDecoration(
-                      boxShadow: [
-                        index == 2 ? navigationBarIconsShadow : BoxShadow(),
-                      ],
-                    ),
-                    child: buildSvgPicture(index == 2
-                        ? 'icons/SafariBold.svg'
-                        : 'icons/SafariOutline.svg'),
-                  ),
-                  title: Container()),
-              BottomNavigationBarItem(
-                  icon: Container(
-                    decoration: BoxDecoration(
-                      boxShadow: [
-                        index == 3 ? navigationBarIconsShadow : BoxShadow(),
-                      ],
-                    ),
-                    child: buildSvgPicture(index == 3
-                        ? 'icons/UserBold.svg'
-                        : 'icons/UserOutline.svg'),
-                  ),
-                  title: Container()),
+              // BottomNavigationBarItem(
+              //     icon: Container(
+              //       decoration: BoxDecoration(
+              //         boxShadow: [
+              //           index == 2 ? navigationBarIconsShadow : BoxShadow(),
+              //         ],
+              //       ),
+              //       child: buildSvgPicture(index == 2
+              //           ? 'icons/SafariBold.svg'
+              //           : 'icons/SafariOutline.svg'),
+              //     ),
+              //     title: Container()),
+              // BottomNavigationBarItem(
+              //     icon: Container(
+              //       decoration: BoxDecoration(
+              //         boxShadow: [
+              //           index == 3 ? navigationBarIconsShadow : BoxShadow(),
+              //         ],
+              //       ),
+              //       child: buildSvgPicture(index == 3
+              //           ? 'icons/UserBold.svg'
+              //           : 'icons/UserOutline.svg'),
+              //     ),
+              //     title: Container()),
             ]),
       ),
     );

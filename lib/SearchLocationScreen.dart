@@ -2,6 +2,7 @@ import 'dart:ui';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
+import 'package:glass_kit/glass_kit.dart';
 import 'package:weather/consts.dart';
 
 bool show = true;
@@ -36,31 +37,6 @@ class _SearchLocationScreenState extends State<SearchLocationScreen> {
             CityCards(),
             MoreCitiesWidget(),
             SizedBox(height: MediaQuery.of(context).size.height * 0.15),
-            show
-                ? Positioned(
-                    bottom: MediaQuery.of(context).size.height * (-0.05),
-                    left: MediaQuery.of(context).size.width * 0.2,
-                    child: Container(
-                      width: 30,
-                      height: 45,
-                      decoration: BoxDecoration(
-                          borderRadius: BorderRadius.circular(25), color: gold),
-                    ),
-                  )
-                : Container(),
-            show
-                ? Positioned(
-                    bottom: MediaQuery.of(context).size.height * (0.025),
-                    left: MediaQuery.of(context).size.width * 0.63,
-                    child: Container(
-                      width: 30,
-                      height: 45,
-                      decoration: BoxDecoration(
-                          borderRadius: BorderRadius.circular(25),
-                          color: purple),
-                    ),
-                  )
-                : Container(),
             WeatherData(),
           ],
         ),
@@ -74,29 +50,23 @@ class WeatherData extends StatelessWidget {
   Widget build(BuildContext context) {
     return Positioned(
       bottom: MediaQuery.of(context).size.height * (-0.14),
-      child: ClipRect(
-        child: BackdropFilter(
-          filter: ImageFilter.blur(sigmaX: 20.0, sigmaY: 20.0),
-          child: Container(
-            width: 300,
-            height: 180,
-            decoration: BoxDecoration(
-                borderRadius: BorderRadius.circular(25),
-                color: Color(0xFF1e2228).withOpacity(0.6)),
-            child: Padding(
-              padding: EdgeInsets.all(12.0),
-              child: Row(
-                mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                children: [
-                  Column(
-                    children: [Precipation(), SizedBox(height: 40), Humidity()],
-                  ),
-                  Column(
-                    children: [Wind(), SizedBox(height: 40), Presure()],
-                  )
-                ],
+      child: GlassContainer.clearGlass(
+        color: Color(0xFF1e2228).withOpacity(0.6),
+        borderRadius: BorderRadius.circular(25),
+        width: 300,
+        height: 180,
+        child: Padding(
+          padding: EdgeInsets.all(12.0),
+          child: Row(
+            mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+            children: [
+              Column(
+                children: [Precipation(), SizedBox(height: 40), Humidity()],
               ),
-            ),
+              Column(
+                children: [Wind(), SizedBox(height: 40), Presure()],
+              )
+            ],
           ),
         ),
       ),
@@ -296,59 +266,53 @@ class CitiesCard extends StatelessWidget {
   Widget build(BuildContext context) {
     return Padding(
       padding: EdgeInsets.all(8.0),
-      child: ClipRect(
-        child: BackdropFilter(
-          filter: ImageFilter.blur(sigmaX: 5.0, sigmaY: 5.0),
-          child: Container(
-            decoration: BoxDecoration(
-                borderRadius: BorderRadius.circular(20),
-                color: Color(0xFF1e2228).withOpacity(0.6)),
-            width: 140,
-            height: 140,
-            child: Padding(
-              padding: EdgeInsets.all(8.0),
-              child: Column(
+      child: GlassContainer.clearGlass(
+        color: Color(0xFF1e2228).withOpacity(0.6),
+        borderRadius: BorderRadius.circular(20),
+        width: 140,
+        height: 140,
+        child: Padding(
+          padding: EdgeInsets.all(8.0),
+          child: Column(
+            children: [
+              Text(
+                cityName,
+                style: TextStyle(color: Colors.white, fontSize: 17),
+              ),
+              SizedBox(height: 12),
+              Image.asset(asset, width: 50, height: 50),
+              SizedBox(height: 12),
+              Row(
+                mainAxisAlignment: MainAxisAlignment.center,
                 children: [
-                  Text(
-                    cityName,
-                    style: TextStyle(color: Colors.white, fontSize: 17),
-                  ),
-                  SizedBox(height: 12),
-                  Image.asset(asset, width: 50, height: 50),
-                  SizedBox(height: 12),
                   Row(
                     mainAxisAlignment: MainAxisAlignment.center,
                     children: [
-                      Row(
-                        mainAxisAlignment: MainAxisAlignment.center,
-                        children: [
-                          Text(
-                            temp.toString(),
-                            style: TextStyle(
-                                color: Colors.white,
-                                fontSize: 22,
-                                fontWeight: FontWeight.bold),
-                          ),
-                          Text(
-                            '°',
-                            style: TextStyle(
-                                color: gold,
-                                fontSize: 22,
-                                fontWeight: FontWeight.bold),
-                          ),
-                        ],
-                      ),
-                      SizedBox(width: 12),
                       Text(
-                        weatherType,
+                        temp.toString(),
                         style: TextStyle(
-                            color: gray, fontSize: 13.5, fontFamily: 'Roboto'),
-                      )
+                            color: Colors.white,
+                            fontSize: 22,
+                            fontWeight: FontWeight.bold),
+                      ),
+                      Text(
+                        '°',
+                        style: TextStyle(
+                            color: gold,
+                            fontSize: 22,
+                            fontWeight: FontWeight.bold),
+                      ),
                     ],
+                  ),
+                  SizedBox(width: 12),
+                  Text(
+                    weatherType,
+                    style: TextStyle(
+                        color: gray, fontSize: 13.5, fontFamily: 'Roboto'),
                   )
                 ],
-              ),
-            ),
+              )
+            ],
           ),
         ),
       ),
