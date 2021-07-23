@@ -3,9 +3,10 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:glass_kit/glass_kit.dart';
+import 'package:loading_indicator/loading_indicator.dart';
+import 'package:provider/provider.dart';
 import 'package:weather/consts.dart';
-
-bool show = true;
+import 'package:weather/Services/FindCity.dart';
 
 class SearchLocationScreen extends StatefulWidget {
   @override
@@ -15,33 +16,58 @@ class SearchLocationScreen extends StatefulWidget {
 class _SearchLocationScreenState extends State<SearchLocationScreen> {
   @override
   Widget build(BuildContext context) {
-    return SafeArea(
+    return ChangeNotifierProvider(
+      create: (BuildContext context) => FindCity(),
+      child: SafeArea(
+          child: SingleChildScrollView(
         child: Column(
-      children: [
-        Text(
-          'Search for city',
-          style: TextStyle(
-              fontFamily: 'Roboto', fontSize: 26, color: Colors.white),
-        ),
-        SizedBox(height: 20),
-        TextFiled(),
-        SizedBox(height: MediaQuery.of(context).size.height * 0.15),
-        Stack(
-          alignment: AlignmentDirectional.center,
-          overflow: Overflow.visible,
           children: [
-            Image.asset(
-              'icons/world.png',
-              fit: BoxFit.fill,
+            Text(
+              'Search for city',
+              style: TextStyle(
+                  fontFamily: 'Roboto', fontSize: 26, color: Colors.white),
             ),
-            CityCards(),
-            MoreCitiesWidget(),
+            SizedBox(height: 20),
+            TextFiled(),
             SizedBox(height: MediaQuery.of(context).size.height * 0.15),
-            WeatherData(),
+            Stack(
+              alignment: AlignmentDirectional.center,
+              overflow: Overflow.visible,
+              children: [
+                Image.asset(
+                  'icons/world.png',
+                  fit: BoxFit.fill,
+                ),
+                Consumer<FindCity>(builder: (context, dynamic data, _) {
+                  print(data.weatherData!.name);
+                  print(data.weatherData!.weather[0].main);
+                  print(data.weatherData!.main.temp.toInt());
+                  return CityCards(
+                      cityName: data.weatherData!.name,
+                      weatherStatus: data.weatherData!.weather[0].main,
+                      temp: data.weatherData!.main.temp.toInt());
+                }),
+                MoreCitiesWidget(),
+                SizedBox(height: MediaQuery.of(context).size.height * 0.15),
+                WeatherData(),
+                Consumer<FindCity>(builder: (context, value, _) {
+                  return value.loading
+                      ? Container(
+                          width: 75,
+                          height: 35,
+                          child: LoadingIndicator(
+                              indicatorType: Indicator.lineScale,
+                              strokeWidth: 1,
+                              colors: const [gray]),
+                        )
+                      : Container();
+                })
+              ],
+            ),
           ],
         ),
-      ],
-    ));
+      )),
+    );
   }
 }
 
@@ -193,44 +219,57 @@ class MoreCitiesWidget extends StatelessWidget {
 }
 
 class CityCards extends StatelessWidget {
-  const CityCards({
-    Key? key,
-  }) : super(key: key);
+  CityCards(
+      {required this.cityName,
+      required this.weatherStatus,
+      required this.temp});
+
+  dynamic cityName, weatherStatus, temp;
 
   @override
   Widget build(BuildContext context) {
+    if (temp != null) {
+      temp -= 272;
+    }else {
+      temp = 0;
+    }
     return Positioned(
       bottom: MediaQuery.of(context).size.width * 0.4,
-      child: Row(
-        mainAxisAlignment: MainAxisAlignment.center,
-        children: [
-          CitiesCard(
-              temp: 36,
-              asset: 'icons/26.png',
-              weatherType: 'Sunny',
-              cityName: 'Karaj'),
-          CitiesCard(
-              cityName: 'Tehran',
-              temp: 40,
-              asset: 'icons/6.png',
-              weatherType: 'Wind'),
-        ],
-      ),
+      child: CitiesCard(
+          temp: temp,
+          asset: 'icons/26.png',
+          weatherType: weatherStatus,
+          cityName: cityName),
     );
   }
 }
 
-class TextFiled extends StatelessWidget {
+class TextFiled extends StatefulWidget {
+  @override
+  State<TextFiled> createState() => _TextFiledState();
+}
+
+class _TextFiledState extends State<TextFiled> {
+  late String cityName;
+
   @override
   Widget build(BuildContext context) {
     return Padding(
       padding: EdgeInsets.symmetric(horizontal: 20),
       child: TextFormField(
         autofocus: false,
+        onChanged: (input) {
+          setState(() {
+            cityName = input;
+          });
+        },
         style: TextStyle(color: grey, fontFamily: 'Roboto', fontSize: 16),
         decoration: InputDecoration(
           prefixIcon: IconButton(
-            onPressed: () {},
+            onPressed: () async {
+              await Provider.of<FindCity>(context, listen: false)
+                  .getResponse(cityName);
+            },
             icon: SvgPicture.asset(
               'icons/SearchOutline.svg',
               width: 18,
@@ -259,8 +298,8 @@ class CitiesCard extends StatelessWidget {
       required this.temp,
       required this.asset});
 
-  int temp;
-  String cityName, weatherType, asset;
+  var temp;
+  var cityName, weatherType, asset;
 
   @override
   Widget build(BuildContext context) {
