@@ -1,91 +1,96 @@
+// To parse this JSON data, do
+//
+//     final nearbyCities = nearbyCitiesFromJson(jsonString);
+
+import 'package:meta/meta.dart';
 import 'dart:convert';
 
-WeatherData weatherDataFromJson(String str) =>
-    WeatherData.fromJson(json.decode(str));
+NearbyCities nearbyCitiesFromJson(String str) =>
+    NearbyCities.fromJson(json.decode(str));
 
-String weatherDataToJson(WeatherData data) => json.encode(data.toJson());
-
-class WeatherData {
-  WeatherData({
-    required this.coord,
-    required this.weather,
-    required this.main,
-    required this.wind,
-    required this.clouds,
-    required this.name,
+class NearbyCities {
+  NearbyCities({
+    required this.cod,
+    required this.count,
+    required this.list,
   });
 
-  Coord coord;
-  List<Weather> weather;
-  Main main;
-  Wind wind;
-  Clouds clouds;
-  String name;
+  String cod;
+  int count;
+  List<ListElement> list;
 
-  factory WeatherData.fromJson(Map<String, dynamic> json) => WeatherData(
-        coord: Coord.fromJson(json["coord"]),
-        weather:
-            List<Weather>.from(json["weather"].map((x) => Weather.fromJson(x))),
-        main: Main.fromJson(json["main"]),
-        wind: Wind.fromJson(json["wind"]),
-        clouds: Clouds.fromJson(json["clouds"]),
-        name: json["name"],
+  factory NearbyCities.fromJson(Map<String, dynamic> json) => NearbyCities(
+        cod: json["cod"],
+        count: json["count"],
+        list: List<ListElement>.from(
+            json["list"].map((x) => ListElement.fromJson(x))),
       );
-
-  Map<String, dynamic> toJson() => {
-        "coord": coord.toJson(),
-        "weather": List<dynamic>.from(weather.map((x) => x.toJson())),
-        "main": main.toJson(),
-        "wind": wind.toJson(),
-        "clouds": clouds.toJson(),
-        "name": name,
-      };
 }
 
-class Clouds {
-  Clouds({
-    required this.all,
+class ListElement {
+  ListElement({
+    required this.id,
+    required this.name,
+    required this.coord,
+    required this.main,
+    required this.wind,
+    required this.rain,
+    required this.snow,
+    required this.weather,
   });
 
-  int all;
+  int id;
+  String name;
+  Coord coord;
+  MainClass main;
+  Wind wind;
+  dynamic rain;
+  dynamic snow;
+  List<Weather> weather;
 
-  factory Clouds.fromJson(Map<String, dynamic> json) => Clouds(
-        all: json["all"],
+  factory ListElement.fromJson(Map<String, dynamic> json) => ListElement(
+        id: json["id"],
+        name: json["name"],
+        coord: Coord.fromJson(json["coord"]),
+        main: MainClass.fromJson(json["main"]),
+        wind: Wind.fromJson(json["wind"]),
+        rain: json["rain"],
+        snow: json["snow"],
+        weather:
+            List<Weather>.from(json["weather"].map((x) => Weather.fromJson(x))),
       );
-
-  Map<String, dynamic> toJson() => {
-        "all": all,
-      };
 }
 
 class Coord {
   Coord({
-    required this.lon,
     required this.lat,
+    required this.lon,
   });
 
-  double lon;
   double lat;
+  double lon;
 
   factory Coord.fromJson(Map<String, dynamic> json) => Coord(
-        lon: json["lon"].toDouble(),
         lat: json["lat"].toDouble(),
+        lon: json["lon"].toDouble(),
       );
 
   Map<String, dynamic> toJson() => {
-        "lon": lon,
         "lat": lat,
+        "lon": lon,
       };
 }
 
-class Main {
-  Main({
+class MainClass {
+  MainClass({
     required this.temp,
     required this.feelsLike,
     required this.tempMin,
     required this.tempMax,
     required this.pressure,
     required this.humidity,
+    required this.seaLevel,
+    required this.grndLevel,
   });
 
   double temp;
@@ -94,14 +99,18 @@ class Main {
   double tempMax;
   int pressure;
   int humidity;
+  int seaLevel;
+  int grndLevel;
 
-  factory Main.fromJson(Map<String, dynamic> json) => Main(
+  factory MainClass.fromJson(Map<String, dynamic> json) => MainClass(
         temp: json["temp"].toDouble(),
         feelsLike: json["feels_like"].toDouble(),
         tempMin: json["temp_min"].toDouble(),
         tempMax: json["temp_max"].toDouble(),
         pressure: json["pressure"],
         humidity: json["humidity"],
+        seaLevel: json["sea_level"],
+        grndLevel: json["grnd_level"],
       );
 
   Map<String, dynamic> toJson() => {
@@ -111,6 +120,8 @@ class Main {
         "temp_max": tempMax,
         "pressure": pressure,
         "humidity": humidity,
+        "sea_level": seaLevel,
+        "grnd_level": grndLevel,
       };
 }
 
@@ -133,13 +144,6 @@ class Weather {
         description: json["description"],
         icon: json["icon"],
       );
-
-  Map<String, dynamic> toJson() => {
-        "id": id,
-        "main": main,
-        "description": description,
-        "icon": icon,
-      };
 }
 
 class Wind {

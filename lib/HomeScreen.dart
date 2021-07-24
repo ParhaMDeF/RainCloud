@@ -25,7 +25,6 @@ class _HomeScreenState extends State<HomeScreen> {
         child: Scaffold(
           backgroundColor: Colors.black,
           body: PageTransitionSwitcher(
-            duration: Duration(milliseconds: 200),
             transitionBuilder: (child, primaryAnimation, secondaryAnimation) =>
                 FadeThroughTransition(
                     animation: primaryAnimation,
