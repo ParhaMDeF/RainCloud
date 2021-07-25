@@ -15,7 +15,9 @@ class FindCity extends ChangeNotifier {
   Future getResponse(String cityName) async {
     loading = true;
     notifyListeners();
-    var url = Uri.parse('$mainUrl' + 'weather?q=' + '$cityName&appid=$apiKey');
+    var url = Uri.parse(
+        '$mainUrl' + 'weather?q=' + '$cityName' + '&appid=' + '$apiKey');
+    print(url);
     try {
       http.Response response = await http.get(url);
       if (response.statusCode == 200) {
@@ -46,6 +48,7 @@ class FindCity extends ChangeNotifier {
       http.Response response = await http.get(url);
       if (response.statusCode == 200) {
         nearbyCities = nearbyCitiesFromJson(response.body);
+        notifyListeners();
         loading = false;
         notifyListeners();
       } else {
