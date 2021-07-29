@@ -6,7 +6,7 @@ import 'package:loading_indicator/loading_indicator.dart';
 import 'package:provider/provider.dart';
 import 'package:weather/Services/IconManager.dart';
 import 'package:weather/consts.dart';
-import 'package:weather/Services/FindCity.dart';
+import 'package:weather/Services/Networking.dart';
 import 'Widgets/CityCard.dart';
 import 'Widgets/HumidityWidget.dart';
 import 'Widgets/MinMaxTempWidget.dart';
@@ -16,14 +16,11 @@ import 'Widgets/SearchTextFIeld.dart';
 import 'Widgets/WindWidget.dart';
 
 class SearchLocationScreen extends StatefulWidget {
+  static const String id = 'searchLocationScreen';
+
   @override
   _SearchLocationScreenState createState() => _SearchLocationScreenState();
 }
-
-final errorSnackBar =
-    SnackBar(content: Text('city not found'), duration: Duration(seconds: 1));
-final saveSnackBar = SnackBar(
-    content: Text('City added successfully'), duration: Duration(seconds: 1));
 
 class _SearchLocationScreenState extends State<SearchLocationScreen> {
   @override
@@ -49,23 +46,23 @@ class _SearchLocationScreenState extends State<SearchLocationScreen> {
                 overflow: Overflow.visible,
                 children: [
                   Image.asset('icons/world.png', fit: BoxFit.fill),
-                  Consumer2<FindCity, IconManager>(
+                  Consumer2<Networking, IconManager>(
                       builder: (context, dynamic data, icon, _) {
                     return CityCard(
-                            cityName: data.weatherData?.name ?? 'N/A',
-                            weatherType:
-                                data.weatherData?.weather[0]?.main ?? 'N/A',
-                            temp: data.weatherData?.main.temp.toInt() ?? 272,
-                            asset: icon
-                                .codeToIcon[data?.weatherData?.weather[0]!.icon] ?? 'icons/DClearSky.png',
-                            lat: data.weatherData?.coord.lat ?? 0,
-                            lon: data.weatherData?.coord.lon ?? 0,
-                          );
+                      cityName: data.weatherData?.name ?? 'N/A',
+                      weatherType: data.weatherData?.weather[0]?.main ?? 'N/A',
+                      temp: data.weatherData?.main.temp.toInt() ?? 272,
+                      asset: icon.codeToIcon[
+                              data?.weatherData?.weather[0]!.icon] ??
+                          'icons/DClearSky.png',
+                      lat: data.weatherData?.coord.lat ?? 0,
+                      lon: data.weatherData?.coord.lon ?? 0,
+                    );
                   }),
                   NearbyCitiesButton(),
                   SizedBox(height: height * 0.15),
                   WeatherData(),
-                  Consumer<FindCity>(builder: (context, value, _) {
+                  Consumer<Networking>(builder: (context, value, _) {
                     return value.loading
                         ? Container(
                             width: 75,
@@ -90,7 +87,7 @@ class _SearchLocationScreenState extends State<SearchLocationScreen> {
 class WeatherData extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
-    var data = Provider.of<FindCity>(context).weatherData;
+    var data = Provider.of<Networking>(context).weatherData;
     return Positioned(
       bottom: MediaQuery.of(context).size.height * (-0.14),
       child: GlassContainer.clearGlass(
@@ -100,49 +97,31 @@ class WeatherData extends StatelessWidget {
         height: 180,
         child: Padding(
             padding: EdgeInsets.all(12.0),
-            child: data != null
-                ? Row(
-                    mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                    children: [
-                      Column(
-                        children: [
-                          MinMaxTemp(
-                              min: data.main.tempMin.toInt(),
-                              max: data.main.tempMax.toInt()),
-                          SizedBox(height: 40),
-                          Humidity(humidity: data.main.humidity)
-                        ],
-                      ),
-                      Column(
-                        children: [
-                          WindWidget(wind: data.wind.speed.toInt()),
-                          SizedBox(height: 40),
-                          Pressure(
-                            pressure: data.main.pressure,
-                          )
-                        ],
-                      )
-                    ],
-                  )
-                : Row(
-                    mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                    children: [
-                      Column(
-                        children: [
-                          MinMaxTemp(min: 'N/A', max: 'N/A'),
-                          SizedBox(height: 40),
-                          Humidity(humidity: 'N/A')
-                        ],
-                      ),
-                      Column(
-                        children: [
-                          WindWidget(wind: 'N/A'),
-                          SizedBox(height: 40),
-                          Pressure(pressure: 'N/A')
-                        ],
-                      )
-                    ],
-                  )),
+            child: Row(
+              mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+              children: [
+                Column(
+                  children: [
+                    MinMaxTemp(
+                        min: data != null ? data.main.tempMin.toInt() : 'N/A',
+                        max: data != null ? data.main.tempMax.toInt() : 'N/A'),
+                    SizedBox(height: 40),
+                    Humidity(
+                        humidity: data != null ? data.main.humidity : 'N/A')
+                  ],
+                ),
+                Column(
+                  children: [
+                    WindWidget(
+                        wind: data != null ? data.wind.speed.toInt() : 'N/A'),
+                    SizedBox(height: 40),
+                    Pressure(
+                      pressure: data != null ? data.main.pressure : 'N/A',
+                    )
+                  ],
+                )
+              ],
+            )),
       ),
     );
   }

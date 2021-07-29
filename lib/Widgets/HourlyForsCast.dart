@@ -6,18 +6,18 @@ import 'package:weather/consts.dart';
 class HourlyForsCast extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
-    return Expanded(
+    return Flexible(
       child: ListView(
         scrollDirection: Axis.horizontal,
         children: [
           HourlyItems(
               temp: 11,
-              weatherType: 'icons/15.png',
+              weatherType: 'icons/13.png',
               hour: '01:00 PM',
               color: purple),
           HourlyItems(
               temp: 10,
-              weatherType: 'icons/20.png',
+              weatherType: 'icons/13.png',
               hour: '03:00 PM',
               color: purple),
           HourlyItems(
@@ -27,12 +27,12 @@ class HourlyForsCast extends StatelessWidget {
               color: gold),
           HourlyItems(
               temp: 20,
-              weatherType: 'icons/17.png',
+              weatherType: 'icons/13.png',
               hour: '09:00 AM',
               color: gold),
           HourlyItems(
               temp: 25,
-              weatherType: 'icons/18.png',
+              weatherType: 'icons/13.png',
               hour: '11:00 AM',
               color: gold),
         ],
@@ -89,7 +89,7 @@ class HourlyItems extends StatelessWidget {
                   Text(
                     hour,
                     style: TextStyle(
-                        color: gray, fontSize: 12, fontFamily: 'Roboto'),
+                        color: gray, fontSize: 12),
                   ),
                   SizedBox(height: 15),
                   Text(
@@ -97,7 +97,6 @@ class HourlyItems extends StatelessWidget {
                     style: TextStyle(
                         color: grey,
                         fontSize: 18,
-                        fontFamily: 'Roboto',
                         fontWeight: FontWeight.bold),
                   )
                 ],

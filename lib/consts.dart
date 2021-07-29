@@ -1,5 +1,6 @@
-import 'package:flutter/cupertino.dart';
 
+import 'package:flutter/cupertino.dart';
+import 'package:flutter/material.dart';
 const Color gray = Color(0XFFACACA9);
 const Color black = Color(0XFF50505);
 const Color grey = Color(0XFFD3D5D4);
@@ -14,3 +15,7 @@ BoxShadow navigationBarIconsShadow = BoxShadow(
   offset:
   Offset(0, 0), // changes position of shadow
 );
+final errorSnackBar =
+SnackBar(content: Text('city not found'), duration: Duration(seconds: 1));
+final saveSnackBar = SnackBar(
+    content: Text('City added successfully'), duration: Duration(seconds: 1));

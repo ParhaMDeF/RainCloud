@@ -2,7 +2,7 @@ import 'dart:ui';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:provider/provider.dart';
-import 'package:weather/Services/FindCity.dart';
+import 'package:weather/Services/Networking.dart';
 import '../SearchLocationScreen.dart';
 import '../consts.dart';
 
@@ -17,15 +17,15 @@ class _TextFiledState extends State<TextFiled> {
 
   @override
   Widget build(BuildContext context) {
-    var city = Provider.of<FindCity>(context, listen: false);
+    var city = Provider.of<Networking>(context, listen: false);
     return Padding(
       padding: EdgeInsets.symmetric(horizontal: 20),
       child: TextFormField(
         textInputAction: TextInputAction.search,
         onFieldSubmitted: (value) async {
           _focusNode.unfocus();
-          await Provider.of<FindCity>(context, listen: false)
-              .getResponse(cityName);
+          await Provider.of<Networking>(context, listen: false)
+              .getSearchedWeather(cityName);
           if (city.weatherData == null || city.resCode == 404) {
             ScaffoldMessenger.of(context).showSnackBar(errorSnackBar);
           }
@@ -42,7 +42,7 @@ class _TextFiledState extends State<TextFiled> {
           prefixIcon: IconButton(
             onPressed: () async {
               _focusNode.unfocus();
-              await city.getResponse(cityName);
+              await city.getSearchedWeather(cityName);
               _focusNode.unfocus();
               if (city.weatherData == null || city.resCode == 404) {
                 ScaffoldMessenger.of(context).showSnackBar(errorSnackBar);

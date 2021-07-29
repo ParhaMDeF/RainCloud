@@ -1,8 +1,7 @@
 import 'dart:ui';
-
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/svg.dart';
-import 'consts.dart';
+import 'package:weather/consts.dart';
 
 class NavigationBarButtons extends StatelessWidget {
   NavigationBarButtons({required this.iconAsset, required this.type});

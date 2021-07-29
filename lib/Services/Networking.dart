@@ -1,18 +1,19 @@
 import 'package:flutter/cupertino.dart';
+import 'package:weather/Services/CMHDWeatherData.dart';
 import 'package:weather/Services/NearbyCities.dart';
-import 'package:weather/Services/SaveLocation.dart';
 import 'package:weather/Services/WeatherData.dart';
 import 'package:http/http.dart' as http;
 
-class FindCity extends ChangeNotifier {
+class Networking extends ChangeNotifier {
   var mainUrl = 'https://api.openweathermap.org/data/2.5/';
   WeatherData? weatherData;
   NearbyCities? nearbyCities;
+  CMHDWeatherData? cmhdWeatherData;
   var apiKey = '76425cfe00f4740e72d65cf9bba53e1f';
   bool loading = false;
   late int resCode;
 
-  Future getResponse(String cityName) async {
+  Future getSearchedWeather(String cityName) async {
     loading = true;
     notifyListeners();
     var url = Uri.parse(
@@ -51,6 +52,35 @@ class FindCity extends ChangeNotifier {
         notifyListeners();
         loading = false;
         notifyListeners();
+      } else {
+        loading = false;
+        notifyListeners();
+      }
+    } catch (e) {
+      loading = false;
+      notifyListeners();
+      print(e);
+    }
+  }
+
+  Future getCMHDWeather(var lat, var lon) async {
+    loading = true;
+    var url = Uri.parse('$mainUrl' +
+        'onecall?' +
+        'lat=$lat&lon=$lon&exclude=minutely&appid=$apiKey');
+    try {
+      if (lat != null) {
+        http.Response response = await http.get(url);
+        if (response.statusCode == 200) {
+          cmhdWeatherData = chdWeatherDataFromJson(response.body);
+          print(1);
+          notifyListeners();
+          loading = false;
+          notifyListeners();
+        } else {
+          loading = false;
+          notifyListeners();
+        }
       } else {
         loading = false;
         notifyListeners();

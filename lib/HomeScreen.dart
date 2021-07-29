@@ -7,6 +7,7 @@ import 'package:weather/SearchLocationScreen.dart';
 import 'package:weather/consts.dart';
 
 class HomeScreen extends StatefulWidget {
+  static const String id = 'homeScreen';
   @override
   _HomeScreenState createState() => _HomeScreenState();
 }

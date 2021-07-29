@@ -4,27 +4,27 @@ import 'package:flutter_svg/flutter_svg.dart';
 import 'package:provider/provider.dart';
 import 'package:weather/Services/IconManager.dart';
 import 'package:weather/consts.dart';
-import 'SearchLocationScreen.dart';
-import 'Services/FindCity.dart';
+import 'Services/Networking.dart';
 import 'Services/SaveLocation.dart';
 
 class NearByCitiesScreen extends StatelessWidget {
-  IconManager icon = IconManager();
+  static const String id = 'nearByCitiesScreen';
 
   @override
   Widget build(BuildContext context) {
-    var data = Provider.of<FindCity>(context).nearbyCities;
+    var data = Provider.of<Networking>(context).nearbyCities;
+    var icon = Provider.of<IconManager>(context).codeToIcon;
     return Scaffold(
       body: SafeArea(
           child: ListView.builder(
         itemCount: data?.count ?? 0,
         itemBuilder: (BuildContext context, int index) {
           return CitiesItems(
-              asset: icon.codeToIcon[data?.list[index].weather[0].icon],
-              cityName: data?.list[index].name,
-              weatherData: data?.list[index].weather[0].main,
-              lat:  data?.list[index].coord.lat,
-              lon:  data?.list[index].coord.lon,
+            asset: icon[data?.list[index].weather[0].icon],
+            cityName: data?.list[index].name,
+            weatherData: data?.list[index].weather[0].main,
+            lat: data?.list[index].coord.lat,
+            lon: data?.list[index].coord.lon,
           );
         },
       )),
@@ -54,17 +54,13 @@ class CitiesItems extends StatelessWidget {
         minWidth: 22,
         height: 22,
         padding: EdgeInsets.all(0),
-        onPressed: () async{
+        onPressed: () async {
           var loc = Provider.of<SaveLocation>(context, listen: false);
           await loc.saveToStorage(cityName, lat.toString(), lon.toString());
           ScaffoldMessenger.of(context).showSnackBar(saveSnackBar);
         },
-        child: SvgPicture.asset(
-          'icons/Add.svg',
-          width: 22,
-          height: 22,
-          color: Colors.white,
-        ),
+        child: SvgPicture.asset('icons/Add.svg',
+            width: 22, height: 22, color: Colors.white),
       ),
     );
   }

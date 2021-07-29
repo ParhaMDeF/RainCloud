@@ -1,12 +1,8 @@
-// To parse this JSON data, do
-//
-//     final nearbyCities = nearbyCitiesFromJson(jsonString);
-
-import 'package:meta/meta.dart';
 import 'dart:convert';
 
 NearbyCities nearbyCitiesFromJson(String str) =>
     NearbyCities.fromJson(json.decode(str));
+
 
 class NearbyCities {
   NearbyCities({

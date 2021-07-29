@@ -1,18 +1,16 @@
 import 'dart:ui';
-
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:provider/provider.dart';
-import 'package:weather/Services/FindCity.dart';
-
+import 'package:weather/Services/Networking.dart';
 import '../NearbyCitiesScreen.dart';
 import '../consts.dart';
 
 class NearbyCitiesButton extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
-    return Consumer<FindCity>(
+    return Consumer<Networking>(
       builder: (BuildContext context, cityData, child) {
         return Positioned(
             bottom: MediaQuery.of(context).size.width * 0.25,

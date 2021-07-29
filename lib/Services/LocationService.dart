@@ -2,10 +2,11 @@ import 'package:flutter/cupertino.dart';
 import 'package:geolocator/geolocator.dart';
 
 class LocationService extends ChangeNotifier {
+  var lat, lon;
+
   Future<Position> determinePosition() async {
     bool serviceEnabled;
     LocationPermission permission;
-
     serviceEnabled = await Geolocator.isLocationServiceEnabled();
     if (!serviceEnabled) {
       return Future.error('Location services are disabled.');
@@ -23,7 +24,6 @@ class LocationService extends ChangeNotifier {
       return Future.error(
           'Location permissions are permanently denied, we cannot request permissions.');
     }
-    // Position position = await Geolocator.getLastKnownPosition();
     return await Geolocator.getCurrentPosition(
         desiredAccuracy: LocationAccuracy.high);
   }
@@ -31,7 +31,13 @@ class LocationService extends ChangeNotifier {
   void getLocation() async {
     var loc = await Geolocator.getCurrentPosition(
         desiredAccuracy: LocationAccuracy.high);
-    print(loc.latitude);
-    print(loc.longitude);
+    lat = loc.latitude;
+    lon = loc.longitude;
+    notifyListeners();
+  }
+
+  @override
+  void notifyListeners() {
+    super.notifyListeners();
   }
 }

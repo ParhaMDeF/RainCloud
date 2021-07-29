@@ -1,12 +1,10 @@
 import 'dart:ui';
-
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:glass_kit/glass_kit.dart';
 import 'package:provider/provider.dart';
+import 'package:weather/Services/Networking.dart';
 import 'package:weather/Services/SaveLocation.dart';
-
-import '../SearchLocationScreen.dart';
 import '../consts.dart';
 
 class CityCard extends StatelessWidget {
@@ -40,7 +38,10 @@ class CityCard extends StatelessWidget {
           child: MaterialButton(
             onPressed: () async {
               var loc = Provider.of<SaveLocation>(context, listen: false);
+              var network = Provider.of<Networking>(context, listen: false);
               await loc.saveToStorage(cityName, lat.toString(), lon.toString());
+              await loc.getLocation();
+              await network.getCMHDWeather(lat.toString(), lon.toString());
               ScaffoldMessenger.of(context).showSnackBar(saveSnackBar);
             },
             splashColor: darkGrey,

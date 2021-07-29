@@ -1,11 +1,15 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
-
-import 'consts.dart';
+import 'package:weather/consts.dart';
 
 class DateAndLocation extends StatelessWidget {
+
+  DateAndLocation({required this.cityName});
+  String cityName;
+
   DateTime dateTime = DateTime.now();
+
   Map<String, String> numToMonth = {
     '1': 'Jan',
     '2': 'Feb',
@@ -27,26 +31,23 @@ class DateAndLocation extends StatelessWidget {
     var monthNum = dateTime.month;
     var year = dateTime.year;
     String month = numToMonth[monthNum.toString()].toString();
+
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
-        Text('$day' + ',  ' + '$month '+ '$year',
-            style: TextStyle(color: gray, fontSize: 14, fontFamily: 'Roboto')),
+        Text('$day' + ',  ' + '$month ' + '$year',
+            style: TextStyle(color: gray, fontSize: 14)),
         SizedBox(height: 8),
         Row(
           children: [
             SvgPicture.asset('icons/Location.svg',
                 color: Colors.white, width: 15, height: 15),
             SizedBox(width: 4),
-            Text('Tehran, ',
+            Text('${cityName}',
                 style: TextStyle(
                     color: Colors.white,
                     fontSize: 15,
-                    fontWeight: FontWeight.bold,
-                    fontFamily: 'Roboto')),
-            Text('Iran',
-                style:
-                    TextStyle(color: gray, fontSize: 15, fontFamily: 'Roboto')),
+                    fontWeight: FontWeight.bold)),
           ],
         )
       ],
