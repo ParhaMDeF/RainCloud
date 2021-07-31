@@ -28,7 +28,7 @@ class LocationService extends ChangeNotifier {
         desiredAccuracy: LocationAccuracy.high);
   }
 
-  void getLocation() async {
+  Future getLocation() async {
     var loc = await Geolocator.getCurrentPosition(
         desiredAccuracy: LocationAccuracy.high);
     lat = loc.latitude;

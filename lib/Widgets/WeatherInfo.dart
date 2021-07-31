@@ -1,29 +1,26 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:loading_indicator/loading_indicator.dart';
-import 'package:provider/provider.dart';
 import 'package:weather/Services/IconManager.dart';
-import 'package:weather/Services/Networking.dart';
 import 'package:weather/consts.dart';
 
-class WeatherInfo extends StatefulWidget {
-  @override
-  _WeatherInfoState createState() => _WeatherInfoState();
-}
+class WeatherInfo extends StatelessWidget {
+  WeatherInfo(this.data);
 
-class _WeatherInfoState extends State<WeatherInfo> {
+  var data;
 
   @override
-
   Widget build(BuildContext context) {
     var width = MediaQuery.of(context).size.width;
     var height = MediaQuery.of(context).size.height;
-    var data = Provider.of<Networking>(context);
-    var selectIcon = Provider.of<IconManager>(context).codeToIcon;
+    var iconSelection = IconManager.codeToIcon;
 
     int? temp = data.cmhdWeatherData?.current.temp.toInt() ?? 272;
-    String? weatherType = data.cmhdWeatherData?.current.weather[0].main ?? 'N/A';
-    String? icon = selectIcon[data.cmhdWeatherData?.current.weather[0].icon] ?? 'icons/12.png';
+    String? weatherType =
+        data.cmhdWeatherData?.current.weather[0].main ?? 'N/A';
+    String? icon =
+        iconSelection[data.cmhdWeatherData?.current.weather[0].icon] ??
+            'icons/12.png';
     return Stack(
       children: [
         Image.asset('icons/world.png',
@@ -45,28 +42,27 @@ class _WeatherInfoState extends State<WeatherInfo> {
             SizedBox(height: 25),
             Text(
               '$weatherType',
-              style: TextStyle(
-                  color: Colors.white, fontSize: 18, fontFamily: 'Roboto'),
+              style: TextStyle(color: Colors.white, fontSize: 18),
             ),
             SizedBox(height: 14),
             Row(
               mainAxisAlignment: MainAxisAlignment.center,
               children: [
                 Text(
-                  (temp - 272).toString(),
+                  (temp! - 272).toString(),
                   style: TextStyle(
-                      color: Colors.white,
-                      fontSize: 65,
-                      fontWeight: FontWeight.bold,
-                      fontFamily: 'Roboto'),
+                    color: Colors.white,
+                    fontSize: 65,
+                    fontWeight: FontWeight.bold,
+                  ),
                 ),
                 Text(
                   '°',
                   style: TextStyle(
-                      color: gold,
-                      fontSize: 60,
-                      fontWeight: FontWeight.bold,
-                      fontFamily: 'Roboto'),
+                    color: gold,
+                    fontSize: 60,
+                    fontWeight: FontWeight.bold,
+                  ),
                 ),
               ],
             ),

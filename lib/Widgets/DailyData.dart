@@ -24,18 +24,18 @@ class HourlyDailyForecast extends StatelessWidget {
         itemBuilder: (BuildContext context, int index) {
           return num == 1
               ? HourlyDailyItems(
-                  index: 1,
-                  temp: data!.hourly[index+1].temp.toInt(),
-                  time: data.hourly[index+1].dt,
-                  asset: icon[data.hourly[index+1].weather[0].icon],
-                )
+            index: 1,
+            temp: data!.hourly[index+1].temp.toInt(),
+            time: data.hourly[index+1].dt,
+            asset: icon[data.hourly[index+1].weather[0].icon],
+          )
               : HourlyDailyItems(
-                  index: 2,
-                  temp: data!.daily[index+1].temp.day.toInt(),
-                  time: data.daily[index+1].dt,
-                  asset:
-                      icon[data.daily[index+1].weather[0].icon],
-                );
+            index: 2,
+            temp: data!.daily[index+1].temp.day.toInt(),
+            time: data.daily[index+1].dt,
+            asset:
+            icon[data.daily[index+1].weather[0].icon],
+          );
         },
       ),
     );
@@ -45,9 +45,9 @@ class HourlyDailyForecast extends StatelessWidget {
 class HourlyDailyItems extends StatelessWidget {
   HourlyDailyItems(
       {required this.index,
-      required this.temp,
-      required this.time,
-      required this.asset});
+        required this.temp,
+        required this.time,
+        required this.asset});
 
   int temp, index;
   var time, asset;

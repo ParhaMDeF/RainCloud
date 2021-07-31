@@ -8,6 +8,15 @@ const Color darkGrey = Color(0XFF59595A);
 const Color gold = Color(0XFFE2C029);
 const Color lightBrown = Color(0XFFD3C49C);
 const Color purple = Color(0xFF72dbcff);
+Map<int , String> days = {
+  1: 'Monday',
+  2: 'Tuesday',
+  3: 'Wednesday',
+  4: 'Thursday',
+  5: 'Friday',
+  6: 'Saturday',
+  7: 'Sunday',
+};
 BoxShadow navigationBarIconsShadow = BoxShadow(
   color: darkGrey.withOpacity(0.2),
   spreadRadius: 12,

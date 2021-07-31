@@ -9,6 +9,7 @@ class Networking extends ChangeNotifier {
   WeatherData? weatherData;
   NearbyCities? nearbyCities;
   CMHDWeatherData? cmhdWeatherData;
+  late String cityName;
   var apiKey = '76425cfe00f4740e72d65cf9bba53e1f';
   bool loading = false;
   late int resCode;
@@ -63,6 +64,21 @@ class Networking extends ChangeNotifier {
     }
   }
 
+  Future getCityName(String lat, String lon) async {
+    var url =
+    Uri.parse('$mainUrl' + 'weather?lat=$lat&lon=$lon&appid=$apiKey');
+    try {
+      http.Response response = await http.get(url);
+      if (response.statusCode == 200) {
+        cityName = weatherDataFromJson(response.body).name;
+        notifyListeners();
+      }
+    } catch (e) {
+      notifyListeners();
+      print(e);
+    }
+  }
+
   Future getCMHDWeather(var lat, var lon) async {
     loading = true;
     var url = Uri.parse('$mainUrl' +
@@ -73,7 +89,7 @@ class Networking extends ChangeNotifier {
         http.Response response = await http.get(url);
         if (response.statusCode == 200) {
           cmhdWeatherData = chdWeatherDataFromJson(response.body);
-          print(1);
+          cmhdWeatherData?.hourly.removeRange(23, 47);
           notifyListeners();
           loading = false;
           notifyListeners();

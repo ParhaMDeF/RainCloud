@@ -1,7 +1,7 @@
 import 'package:flutter/cupertino.dart';
 
 class IconManager extends ChangeNotifier {
-  Map<String, String> codeToIcon = {
+ static Map<String, String> codeToIcon = {
     '01d': 'icons/DClearSky.png',
     '01n': 'icons/NClearSky.png',
     '02d': 'icons/DFewCloud.png',

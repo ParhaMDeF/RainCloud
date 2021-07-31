@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:weather/HomeScreen.dart';
+import 'package:weather/Services/LocationService.dart';
 import 'package:weather/Services/Networking.dart';
 import 'package:weather/Services/SaveLocation.dart';
 
@@ -18,23 +19,19 @@ class Splash extends StatefulWidget {
 class _SplashState extends State<Splash> {
   late bool firstRun;
 
-  Future<void> isFirstRun() async {
+  Future<void> setFirstRun() async {
     SharedPreferences sharedPreferences = await SharedPreferences.getInstance();
     if (sharedPreferences.getBool('firstRun') == null) {
-      sharedPreferences.setBool('firstRun', true);
-    } else {
       sharedPreferences.setBool('firstRun', false);
     }
   }
 
   Future getFirstRun() async {
     SharedPreferences sharedPreferences = await SharedPreferences.getInstance();
-    firstRun = sharedPreferences.getBool('firstRun')!;
+    firstRun = (sharedPreferences.getBool('firstRun')) ?? true;
   }
 
-  Future<void> getData() async {
-    var savedCity = Provider.of<SaveLocation>(context, listen: false);
-    var network = Provider.of<Networking>(context, listen: false);
+  Future<void> getData(var savedCity, var network) async {
     await savedCity.getLocation();
     int? length = savedCity.cities?.list.length;
     await network.getCMHDWeather(savedCity.cities?.list[length! - 1].coord.lat,
@@ -42,11 +39,19 @@ class _SplashState extends State<Splash> {
   }
 
   void doJobs() async {
-    await isFirstRun();
+    var savedCity = Provider.of<SaveLocation>(context, listen: false);
+    var network = Provider.of<Networking>(context, listen: false);
     await getFirstRun();
-    print(firstRun);
     if (!firstRun) {
-      await getData();
+      await getData(savedCity, network);
+    } else {
+      var loc = Provider.of<LocationService>(context, listen: false);
+      await loc.getLocation();
+      await network.getCMHDWeather(loc.lat, loc.lon);
+      await network.getCityName(loc.lat.toString(), loc.lon.toString());
+      await savedCity.saveToStorage(
+          network.cityName, loc.lat.toString(), loc.lon.toString());
+      await setFirstRun();
     }
     Navigator.pushReplacementNamed(context, HomeScreen.id);
   }

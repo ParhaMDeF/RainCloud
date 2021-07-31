@@ -3,21 +3,20 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:glass_kit/glass_kit.dart';
 import 'package:provider/provider.dart';
-import 'package:weather/Services/Networking.dart';
 import 'package:weather/Services/SaveLocation.dart';
 import '../consts.dart';
 
 class CityCard extends StatelessWidget {
-  CityCard({
-    required this.cityName,
-    required this.weatherType,
-    required this.temp,
-    required this.asset,
-    required this.lat,
-    required this.lon,
-  });
+  CityCard(
+      {required this.cityName,
+      required this.weatherType,
+      required this.temp,
+      required this.asset,
+      required this.lat,
+      required this.lon,
+      required this.network});
 
-  var cityName, weatherType, asset, temp, lat, lon;
+  var cityName, weatherType, asset, temp, lat, lon, network;
 
   @override
   Widget build(BuildContext context) {
@@ -38,7 +37,6 @@ class CityCard extends StatelessWidget {
           child: MaterialButton(
             onPressed: () async {
               var loc = Provider.of<SaveLocation>(context, listen: false);
-              var network = Provider.of<Networking>(context, listen: false);
               await loc.saveToStorage(cityName, lat.toString(), lon.toString());
               await loc.getLocation();
               await network.getCMHDWeather(lat.toString(), lon.toString());

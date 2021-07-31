@@ -6,7 +6,6 @@ import 'package:weather/NearbyCitiesScreen.dart';
 import 'package:weather/SearchLocationScreen.dart';
 import 'package:weather/consts.dart';
 import 'Services/Networking.dart';
-import 'Services/IconManager.dart';
 import 'Services/LocationService.dart';
 import 'Services/SaveLocation.dart';
 import 'Splash.dart';
@@ -21,7 +20,6 @@ class MyApp extends StatelessWidget {
     return MultiProvider(
       providers: [
         ChangeNotifierProvider(create: (BuildContext context) => Networking()),
-        ChangeNotifierProvider(create: (BuildContext context) => IconManager()),
         ChangeNotifierProvider(
             create: (BuildContext context) => SaveLocation()),
         ChangeNotifierProvider(
@@ -35,7 +33,9 @@ class MyApp extends StatelessWidget {
           HomeScreen.id: (context) => HomeScreen(),
           MainScreen.id: (context) => MainScreen(),
           SearchLocationScreen.id: (context) => SearchLocationScreen(),
-          NearByCitiesScreen.id: (context) => NearByCitiesScreen(),
+          NearByCitiesScreen.id: (context) => NearByCitiesScreen(
+                data: null,
+              ),
         },
       ),
     );

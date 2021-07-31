@@ -38,10 +38,12 @@ class Current {
     required this.humidity,
     required this.windSpeed,
     required this.weather,
+    required this.uvi,
   });
 
   int dt;
   double temp;
+  double uvi;
   int pressure;
   int humidity;
   double windSpeed;
@@ -50,6 +52,7 @@ class Current {
   factory Current.fromJson(Map<String, dynamic> json) => Current(
         dt: json["dt"],
         temp: json["temp"].toDouble(),
+        uvi: json["uvi"].toDouble(),
         pressure: json["pressure"],
         humidity: json["humidity"],
         windSpeed: json["wind_speed"].toDouble(),
@@ -60,6 +63,7 @@ class Current {
   Map<String, dynamic> toJson() => {
         "dt": dt,
         "temp": temp,
+        "uvi": uvi,
         "pressure": pressure,
         "humidity": humidity,
         "wind_speed": windSpeed,

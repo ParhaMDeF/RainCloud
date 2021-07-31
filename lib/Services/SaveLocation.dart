@@ -67,7 +67,6 @@ class SaveLocation extends ChangeNotifier {
 
     if(savedCities != null) {
       cities = savedCitiesFromJson(savedCities);
-      print(cities?.list[0].name);
       notifyListeners();
     }
   }
