@@ -4,37 +4,27 @@ import 'package:flutter/material.dart';
 import 'package:weather/Services/IconManager.dart';
 import 'package:weather/consts.dart';
 
-class HourlyDailyForecast extends StatelessWidget {
-  HourlyDailyForecast({required this.num , required this.data});
+class Daily extends StatelessWidget {
+  Daily({required this.data});
 
-  int num;
   var temp, time, asset;
   var icon = IconManager.codeToIcon;
   var data;
   @override
   Widget build(BuildContext context) {
     var length1 = data?.hourly.length -1;
-    var length2 = data?.daily.length -1 ;
     return Container(
       height: 105,
       child: ListView.builder(
         addSemanticIndexes: true,
-        itemCount: num == 1 ? length1 : length2 ,
+        itemCount: length1  ,
         scrollDirection: Axis.horizontal,
         itemBuilder: (BuildContext context, int index) {
-          return num == 1
-              ? HourlyDailyItems(
-            index: 1,
+          return
+              HourlyDailyItems(
             temp: data!.hourly[index+1].temp.toInt(),
             time: data.hourly[index+1].dt,
             asset: icon[data.hourly[index+1].weather[0].icon],
-          )
-              : HourlyDailyItems(
-            index: 2,
-            temp: data!.daily[index+1].temp.day.toInt(),
-            time: data.daily[index+1].dt,
-            asset:
-            icon[data.daily[index+1].weather[0].icon],
           );
         },
       ),
@@ -44,12 +34,12 @@ class HourlyDailyForecast extends StatelessWidget {
 
 class HourlyDailyItems extends StatelessWidget {
   HourlyDailyItems(
-      {required this.index,
+      {
         required this.temp,
         required this.time,
         required this.asset});
 
-  int temp, index;
+  int temp;
   var time, asset;
 
 
@@ -103,7 +93,7 @@ class HourlyDailyItems extends StatelessWidget {
                   ),
                   SizedBox(height: 15),
                   Text(
-                    index ==1 ? '${dateTime.hour}:${dateTime.minute}' : '$day',
+                     '${dateTime.hour}:${dateTime.minute}',
                     style: TextStyle(color: gray, fontSize: 12),
                   ),
                   SizedBox(height: 15),

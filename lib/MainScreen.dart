@@ -6,7 +6,7 @@ import 'Services/SaveLocation.dart';
 import 'Widgets/DateAndLocation.dart';
 import 'Widgets/HourlyForsCast.dart';
 import 'Widgets/WeatherInfo.dart';
-
+import 'Widgets/DailyData.dart';
 class MainScreen extends StatelessWidget {
 
   static const String id = 'mainScreen';
@@ -39,9 +39,10 @@ class MainScreen extends StatelessWidget {
               max: 0,
               min: 0),
           SizedBox(height: net?.daily.length != 0 ? 30 : 0),
-          net?.daily.length != 0 ? HourlyDailyForecast(num: 1 , data: net) : Container(),
+          net?.daily.length != 0 ? HourlyDailyForecast( data: net) : Container(),
           SizedBox(height: net?.daily.length != 0 ? 30 : 0),
-         ],
+          net?.daily.length != 0 ? Daily(data: net) : Container(),
+        ],
       ),
     );
   }
