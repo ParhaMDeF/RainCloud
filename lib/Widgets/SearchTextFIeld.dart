@@ -37,7 +37,7 @@ class _TextFiledState extends State<TextFiled> {
             cityName = input;
           });
         },
-        style: TextStyle(color: grey, fontFamily: 'Roboto', fontSize: 16),
+        style: TextStyle(color: grey, fontSize: 16),
         decoration: InputDecoration(
           prefixIcon: IconButton(
             onPressed: () async {

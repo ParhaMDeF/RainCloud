@@ -18,7 +18,7 @@ class IconManager extends ChangeNotifier {
     '11n': 'icons/NThunderStorm.png',
     '13d': 'icons/snow.png',
     '13n': 'icons/snow.png',
-    '50d': 'icons/dust.png',
-    '50n': 'icons/dust.png',
+    '50d': 'icons/DDust.png',
+    '50n': 'icons/NDust.png',
   };
 }

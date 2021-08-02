@@ -27,6 +27,7 @@ class GlassyWeatherDataWidget extends StatelessWidget {
       borderRadius: BorderRadius.circular(25),
       width: 300,
       height: 180,
+      blur: 2.2,
       child: Padding(
           padding: EdgeInsets.all(12.0),
           child: Row(

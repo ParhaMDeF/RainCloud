@@ -1,7 +1,9 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:loading_indicator/loading_indicator.dart';
+import 'package:provider/provider.dart';
 import 'package:weather/Services/IconManager.dart';
+import 'package:weather/Services/Networking.dart';
 import 'package:weather/consts.dart';
 
 class WeatherInfo extends StatelessWidget {
@@ -14,21 +16,22 @@ class WeatherInfo extends StatelessWidget {
     var width = MediaQuery.of(context).size.width;
     var height = MediaQuery.of(context).size.height;
     var iconSelection = IconManager.codeToIcon;
+    // var network = Provider.of<Networking>(context);
 
-    int? temp = data.cmhdWeatherData?.current.temp.toInt() ?? 272;
+    int? temp = context.read<Networking>().cmhdWeatherData?.current.temp.toInt() ?? 272;
     String? weatherType =
-        data.cmhdWeatherData?.current.weather[0].main ?? 'N/A';
+        context.read<Networking>().cmhdWeatherData?.current.weather[0].main ?? 'N/A';
     String? icon =
-        iconSelection[data.cmhdWeatherData?.current.weather[0].icon] ??
+        iconSelection[context.read<Networking>().cmhdWeatherData?.current.weather[0].icon] ??
             'icons/12.png';
     return Stack(
       children: [
         Image.asset('icons/world.png',
             width: 450, height: 300, fit: BoxFit.cover),
-        data.loading
+        context.read<Networking>().loading
             ? Container(
-                width: 75,
-                height: 35,
+                width: 50,
+                height: 20,
                 child: LoadingIndicator(
                     indicatorType: Indicator.lineScale,
                     strokeWidth: 1,
@@ -49,7 +52,7 @@ class WeatherInfo extends StatelessWidget {
               mainAxisAlignment: MainAxisAlignment.center,
               children: [
                 Text(
-                  (temp! - 272).toString(),
+                  (temp - 272).toString(),
                   style: TextStyle(
                     color: Colors.white,
                     fontSize: 65,

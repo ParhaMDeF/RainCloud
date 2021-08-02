@@ -4,8 +4,8 @@ import 'package:shared_preferences/shared_preferences.dart';
 
 class SaveLocation extends ChangeNotifier {
   SharedPreferences? preferences;
-  ListElement? listElement;
   SavedCities? cities;
+  List<String>? savedCity;
 
   List<Map<String, dynamic>>? getFromStorage(String savedData) {
     List<Map<String, dynamic>> dOut = [];
@@ -27,17 +27,19 @@ class SaveLocation extends ChangeNotifier {
   }
 
   Future<void> saveToStorage(String cityName, String lat, String lon) async {
+    List<String>? city = [];
     this.preferences = await SharedPreferences.getInstance();
     List<Map<String, dynamic>>? myData = [];
     Map<String, dynamic> data = {};
     String? savedData = preferences!.getString('city');
-    print(savedData);
-    print('savedData');
+    if (preferences!.getStringList('cities') != null)
+      city = preferences?.getStringList('cities');
     if (savedData != null) {
       myData = getFromStorage(savedData);
       for (int i = 0; i < myData!.length; i++) {
         if (myData[i]["name"] != cityName) {
           if (i == myData.length - 1) {
+            city?.add(cityName);
             myData.add({
               "name": cityName,
               "coord": {'lat': lat, "lon": lon}
@@ -49,6 +51,7 @@ class SaveLocation extends ChangeNotifier {
         }
       }
     } else {
+      city?.add(cityName);
       data = {
         "list": [
           {
@@ -59,13 +62,15 @@ class SaveLocation extends ChangeNotifier {
       };
     }
     preferences?.setString('city', jsonEncode(data));
+    preferences?.setStringList('cities', city!);
   }
 
-  Future<void> getLocation() async{
+  Future<void> getLocation() async {
     SharedPreferences pre = await SharedPreferences.getInstance();
     String? savedCities = pre.getString('city');
-
-    if(savedCities != null) {
+    savedCity = pre.getStringList('cities');
+    notifyListeners();
+    if (savedCities != null) {
       cities = savedCitiesFromJson(savedCities);
       notifyListeners();
     }

@@ -1,5 +1,7 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
+import 'package:geolocator/geolocator.dart';
 import 'package:provider/provider.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:weather/HomeScreen.dart';
@@ -42,18 +44,50 @@ class _SplashState extends State<Splash> {
     var savedCity = Provider.of<SaveLocation>(context, listen: false);
     var network = Provider.of<Networking>(context, listen: false);
     await getFirstRun();
+    network.first = firstRun;
     if (!firstRun) {
       await getData(savedCity, network);
     } else {
       var loc = Provider.of<LocationService>(context, listen: false);
-      await loc.getLocation();
-      await network.getCMHDWeather(loc.lat, loc.lon);
-      await network.getCityName(loc.lat.toString(), loc.lon.toString());
-      await savedCity.saveToStorage(
-          network.cityName, loc.lat.toString(), loc.lon.toString());
-      await setFirstRun();
+      await Geolocator.requestPermission();
+      try {
+        var pre = await Geolocator.checkPermission();
+        if (pre == LocationPermission.denied ||
+            pre == LocationPermission.deniedForever) {
+          Navigator.pushReplacementNamed(context, HomeScreen.id);
+          await setFirstRun();
+        } else {
+          await loc.getLocation();
+          await network.getCMHDWeather(loc.lat, loc.lon);
+          await network.getCityName(loc.lat.toString(), loc.lon.toString());
+          await savedCity.saveToStorage(
+              network.cityName, loc.lat.toString(), loc.lon.toString());
+          await setFirstRun();
+          Navigator.pushReplacementNamed(context, HomeScreen.id);
+        }
+      } catch (e) {
+        showDialog(
+          context: context,
+          builder: (BuildContext context) {
+            return AlertDialog(
+              title: Text("Can't get current location"),
+              content: const Text(
+                  'Please make sure you enable GPS and lunch app again'),
+              actions: <Widget>[
+                FlatButton(
+                  child: Text('Ok'),
+                  onPressed: () async {
+                    await Geolocator.openLocationSettings();
+                    Navigator.of(context, rootNavigator: true).pop();
+                    SystemNavigator.pop();
+                  },
+                ),
+              ],
+            );
+          },
+        );
+      }
     }
-    Navigator.pushReplacementNamed(context, HomeScreen.id);
   }
 
   @override
@@ -71,10 +105,10 @@ class _SplashState extends State<Splash> {
           mainAxisAlignment: MainAxisAlignment.center,
           crossAxisAlignment: CrossAxisAlignment.center,
           children: [
-            Image.asset('icons/27.png', width: 250, height: 150),
+            Image.asset('icons/DThunderStorm.png', width: 250, height: 150),
             SizedBox(height: 50),
             Text(
-              'Weatherly',
+              'RainCloud',
               style: TextStyle(
                 letterSpacing: 1.1,
                 color: Colors.white,

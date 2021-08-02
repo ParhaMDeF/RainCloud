@@ -12,6 +12,7 @@ class NearByCitiesScreen extends StatelessWidget {
 
   static const String id = 'nearByCitiesScreen';
   var data;
+
   @override
   Widget build(BuildContext context) {
     var icon = IconManager.codeToIcon;
@@ -56,12 +57,19 @@ class CitiesItems extends StatelessWidget {
         height: 22,
         padding: EdgeInsets.all(0),
         onPressed: () async {
-          var loc = Provider.of<SaveLocation>(context, listen: false);
-          var network = Provider.of<Networking>(context, listen: false);
-          await loc.saveToStorage(cityName, lat.toString(), lon.toString());
-          await loc.getLocation();
-          await network.getCMHDWeather(lat.toString(), lon.toString());
-          ScaffoldMessenger.of(context).showSnackBar(saveSnackBar);
+          bool? s = context.read<SaveLocation>().savedCity?.contains(cityName);
+          if (cityName != 'N/A') {
+            if (s == false || s == null) {
+              var loc = Provider.of<SaveLocation>(context, listen: false);
+              await loc.saveToStorage(cityName, lat.toString(), lon.toString());
+              await loc.getLocation();
+              await context
+                  .read<Networking>()
+                  .getCMHDWeather(lat.toString(), lon.toString());
+              ScaffoldMessenger.of(context).showSnackBar(saveSnackBar);
+            } else
+              ScaffoldMessenger.of(context).showSnackBar(saveFailedSnackBar);
+          }
         },
         child: SvgPicture.asset('icons/Add.svg',
             width: 22, height: 22, color: Colors.white),
